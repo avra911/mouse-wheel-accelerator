@@ -12,6 +12,9 @@ import os
 # Set XWayland as the runtime environment for maximum compatibility with xdotool
 os.environ['GDK_BACKEND'] = 'x11'
 
+# NEW: Toggle logging/debugging messages
+VERBOSE = False
+
 # Parameters for continuous automatic scrolling (Speed)
 SCROLL_EVENTS_PER_STEP = 2
 DELAY_MS = 0.05
@@ -33,10 +36,20 @@ SCROLLING_AUTOMATICALLY = False
 AUTO_SCROLL_DIRECTION = 0
 AUTO_SCROLL_THREAD = None
 
+# ----------------------------------------------------
+# Logging Function
+# ----------------------------------------------------
+
+
+def log(message):
+    """Prints the message only if VERBOSE is True."""
+    if VERBOSE:
+        print(message)
 
 # ----------------------------------------------------
-# Core Functions (No changes needed here)
+# Core Functions
 # ----------------------------------------------------
+
 
 def inject_scroll(direction, num_events):
     """ Inject scroll events using xdotool click. """
@@ -69,11 +82,11 @@ def auto_scroll_loop():
 
         time.sleep(DELAY_MS)
 
-    print("Automatic scroll stopped.")
+    log("Automatic scroll stopped.")
 
 
 # ----------------------------------------------------
-# MODIFIED: Button Listener Function
+# Button Listener Function
 # ----------------------------------------------------
 def on_click(x, y, button, pressed):
     """ Handles B9 Press (START MODE) and ignores B9 Release. """
@@ -84,8 +97,7 @@ def on_click(x, y, button, pressed):
             # START MODE: Activate on B9 Press
             with LOCK:
                 SCROLLING_AUTOMATICALLY = True
-                print(
-                    "⚡ Acceleration Mode Activated (Requires opposite scroll to stop).")
+                log("Acceleration Mode Activated (Requires opposite scroll to stop).")
 
                 global AUTO_SCROLL_THREAD
                 if AUTO_SCROLL_THREAD is None or not AUTO_SCROLL_THREAD.is_alive():
@@ -97,7 +109,7 @@ def on_click(x, y, button, pressed):
 
 
 # ----------------------------------------------------
-# MODIFIED: Scroll Listener Function (Handles Direction and STOP)
+# Scroll Listener Function (Handles Direction and STOP)
 # ----------------------------------------------------
 def on_scroll(x, y, dx, dy):
     """ Handles scroll events (dictates direction and stop). """
@@ -114,7 +126,7 @@ def on_scroll(x, y, dx, dy):
             if current_scroll_direction != AUTO_SCROLL_DIRECTION and AUTO_SCROLL_DIRECTION != 0:
                 SCROLLING_AUTOMATICALLY = False
                 AUTO_SCROLL_DIRECTION = 0
-                print("🛑 Mode deactivated (Opposite scroll detected).")
+                log("Mode deactivated (Opposite scroll detected).")
                 return  # Stop processing this event
 
             # 2. Update/Set the active scroll direction (This starts/maintains the injection)
@@ -122,7 +134,7 @@ def on_scroll(x, y, dx, dy):
 
 
 def main():
-    print("🚀 Toggle Scroll Control Script (Xorg/XWayland) started.")
+    print("Toggle Scroll Control Script (Xorg/XWayland) started.")
     print(f"  -> ACTIVARE: Apăsare buton {FORWARD_BUTTON_CODE}.")
     print("  -> OPRIRE: Scroll în direcția opusă.")
     print("  -> Vă rugăm să vă asigurați că sunteți logat în Xorg.")
