@@ -9,9 +9,9 @@ The acceleration mode is enabled only while an extra mouse button (default: Butt
 ## ⚙️ How It Works
 
 1. The script listens for mouse events.
-2. When Button 9 (Forward Button) is pressed, the script enters acceleration mode.
+2. When **Button 9** (Forward Button) is pressed, the script enters acceleration mode.
 3. In this mode, any mouse wheel movement is converted into a continuous injection of scroll events, accelerating scrolling.
-4. When Button 9 is released, the mode stops immediately.
+4. **The mode stops only when the user performs a scroll in the opposite direction of the current acceleration.**
 
 ---
 
