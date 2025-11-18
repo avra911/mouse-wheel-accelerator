@@ -89,13 +89,18 @@ If the Forward button doesn't work or you use a different mouse, check which but
 ### Adding to Startup Applications (Ubuntu)
 
 You can make the script start automatically when you log in on Ubuntu by adding it to the GUI Startup Applications:
+- **Get the Absolute Path:** Find the full path to your `start_scroll.sh` wrapper script. You can do this by running the following command in the terminal *from your project directory*:
+   ```bash
+   readlink -f start_scroll.sh
+   ```
+   Copy the output (e.g., `/home/user/my-project/start_scroll.sh`).
 - Make sure `start_scroll.sh` is executable:
   ```bash
-  chmod +x /home/razvan/Projects/mouse-wheel-accelerator/start_scroll.sh
+  chmod +x start_scroll.sh
   ```
 - Open "Startup Applications" (press Super, type "Startup Applications" and open it).
 - Click "Add".
   - Name: Mouse Wheel Accelerator
-  - Command: /home/razvan/Projects/mouse-wheel-accelerator/start_scroll.sh
+  - Command: /home/user/my-project/start_scroll.sh
   - Comment: Start scroll accelerator at login
 - Save and log out/in to test.
